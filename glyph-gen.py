@@ -27,11 +27,14 @@ middle_v_end = pygame.Vector2(60, 110)
 right_start = pygame.Vector2(110, 10)
 right_end = pygame.Vector2(110, 110)
 
+# ----------------------------
 
+button_rect = pygame.Rect(10, 120, 100, 40)
+black = pygame.Color("black")
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((120, 120))
+screen = pygame.display.set_mode((120, 170))
 clock = pygame.time.Clock()
 running = True
 
@@ -47,13 +50,15 @@ while running:
 
     # RENDER YOUR GAME HERE ---------------
     
-    pygame.draw.line(screen, pygame.Color("black"), top_start, top_end)
-    pygame.draw.line(screen, pygame.Color("black"), middle_h_start, middle_h_end)
-    pygame.draw.line(screen, pygame.Color("black"), bottom_start, bottom_end)
+    pygame.draw.line(screen, black, top_start, top_end)
+    pygame.draw.line(screen, black, middle_h_start, middle_h_end)
+    pygame.draw.line(screen, black, bottom_start, bottom_end)
     
-    pygame.draw.line(screen, pygame.Color("black"), left_start, left_end)
-    pygame.draw.line(screen, pygame.Color("black"), middle_v_start, middle_v_end)
-    pygame.draw.line(screen, pygame.Color("black"), right_start, right_end)
+    pygame.draw.line(screen, black, left_start, left_end)
+    pygame.draw.line(screen, black, middle_v_start, middle_v_end)
+    pygame.draw.line(screen, black, right_start, right_end)
+    
+    pygame.draw.rect(screen, black, button_rect, border_radius=5)
     
     # RENDER YOUR GAME HERE ----------------
 
@@ -65,7 +70,7 @@ while running:
 pygame.quit()
 
 
-def generate_glyph(complexity): # Generate the glyph line values, with complexity amount
+def generate_glyph_lines(complexity): # Generate the glyph line values, with complexity amount
 	new_glyph = Glyph()
 	
 	i = 0
