@@ -7,68 +7,44 @@ class Glyph:
 
 # HORIZONTAL LINES -----------
 
-top_start = pygame.Vector2(10, 10)
-top_end = pygame.Vector2(110, 10)
+top_start = pygame.Vector2(20, 20)
+top_end = pygame.Vector2(100, 20)
 
-middle_h_start = pygame.Vector2(10, 60)
-middle_h_end = pygame.Vector2(110, 60)
+middle_h_start = pygame.Vector2(20, 60)
+middle_h_end = pygame.Vector2(100, 60)
 
-bottom_start = pygame.Vector2(10, 110)
-bottom_end = pygame.Vector2(110, 110)
+bottom_start = pygame.Vector2(20, 100)
+bottom_end = pygame.Vector2(100, 100)
 
 # VERTICAL LINES -------------
 
-left_start = pygame.Vector2(10, 10)
-left_end = pygame.Vector2(10, 110)
+left_start = pygame.Vector2(20, 20)
+left_end = pygame.Vector2(20, 100)
 
-middle_v_start = pygame.Vector2(60, 10)
-middle_v_end = pygame.Vector2(60, 110)
+middle_v_start = pygame.Vector2(60, 20)
+middle_v_end = pygame.Vector2(60, 100)
 
-right_start = pygame.Vector2(110, 10)
-right_end = pygame.Vector2(110, 110)
+right_start = pygame.Vector2(100, 20)
+right_end = pygame.Vector2(100, 100)
 
 # ----------------------------
 
-button_rect = pygame.Rect(10, 120, 100, 40)
-black = pygame.Color("black")
+is_generated = False
 
 # pygame setup
 pygame.init()
+pygame.font.init()
 screen = pygame.display.set_mode((120, 170))
 clock = pygame.time.Clock()
 running = True
+pygame.display.set_caption("Glyph Generator")
 
-while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+font = pygame.font.SysFont("ubuntu", 24)
+button_rect = pygame.Rect(10, 120, 100, 40)
+black = pygame.Color("black")
+white = pygame.Color("white")
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("white")
-
-    # RENDER YOUR GAME HERE ---------------
-    
-    pygame.draw.line(screen, black, top_start, top_end)
-    pygame.draw.line(screen, black, middle_h_start, middle_h_end)
-    pygame.draw.line(screen, black, bottom_start, bottom_end)
-    
-    pygame.draw.line(screen, black, left_start, left_end)
-    pygame.draw.line(screen, black, middle_v_start, middle_v_end)
-    pygame.draw.line(screen, black, right_start, right_end)
-    
-    pygame.draw.rect(screen, black, button_rect, border_radius=5)
-    
-    # RENDER YOUR GAME HERE ----------------
-
-    # flip() the display to put your work on screen
-    pygame.display.flip()
-
-    clock.tick(60)  # limits FPS to 60
-
-pygame.quit()
-
+text_surface = font.render("New", True, white)
 
 def generate_glyph_lines(complexity): # Generate the glyph line values, with complexity amount
 	new_glyph = Glyph()
@@ -91,6 +67,62 @@ def generate_glyph_lines(complexity): # Generate the glyph line values, with com
 	
 	return new_glyph
 
+def render_glyph():
+	is_generated = True
+	this_glyph = generate_glyph_lines(0.4)
+	
+	for index, line in enumerate(this_glyph.horizontal):
+		if line == True:
+			match index:
+				case 0:
+					pygame.draw.line(screen, black, top_start, top_end, width=2)
+				case 1:
+					pygame.draw.line(screen, black, middle_h_start, middle_h_end, width=2)
+				case 2:
+					pygame.draw.line(screen, black, bottom_start, bottom_end, width=2)
+		else:
+			continue
+	
+	for index, line in enumerate(this_glyph.vertical):
+		if line == True:
+			match index:
+				case 0:
+					pygame.draw.line(screen, black, left_start, left_end, width=2)
+				case 1:
+					pygame.draw.line(screen, black, middle_v_start, middle_v_end, width=2)
+				case 2:
+					pygame.draw.line(screen, black, right_start, right_end, width=2)
+		else:
+			continue
+
 # value = input("Enter complexity (0.1 to 0.9): ")
 # new = generate_glyph(value)
+
+
+while running:
+    # poll for events
+    # pygame.QUIT event means the user clicked X to close your window
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # fill the screen with a color to wipe away anything from last frame
+    screen.fill("white")
+
+    # RENDER YOUR GAME HERE ---------------
+    
+    if is_generated == False:
+    	render_glyph()
+    
+    pygame.draw.rect(screen, black, button_rect, border_radius=5)
+    screen.blit(text_surface, (37, 125))
+    
+    # RENDER YOUR GAME HERE ----------------
+
+    # flip() the display to put your work on screen
+    pygame.display.flip()
+
+    clock.tick(60)  # limits FPS to 60
+
+pygame.quit()
 
