@@ -1,5 +1,8 @@
 import random
 import pygame
+import pygame_widgets
+
+from pygame_widgets.button import Button
 
 class Glyph:
 	horizontal = [] # Top -> Middle -> Bottom
@@ -39,12 +42,9 @@ clock = pygame.time.Clock()
 running = True
 pygame.display.set_caption("Glyph Generator")
 
-font = pygame.font.SysFont("ubuntu", 24)
-button_rect = pygame.Rect(10, 120, 100, 40)
-black = pygame.Color("black")
-white = pygame.Color("white")
+button = Button(screen, 10, 120, 100, 40, text="New", radius=5, onClick=lambda: render_glyph(generate_glyph_lines(0.4)))
 
-text_surface = font.render("New", True, white)
+black = pygame.Color("black")
 
 def generate_glyph_lines(complexity): # Generate the glyph line values, with complexity amount
 	new_glyph = Glyph()
@@ -67,9 +67,8 @@ def generate_glyph_lines(complexity): # Generate the glyph line values, with com
 	
 	return new_glyph
 
-def render_glyph():
-	is_generated = True
-	this_glyph = generate_glyph_lines(0.4)
+def render_glyph(glyph_list):
+	this_glyph = glyph_list
 	
 	for index, line in enumerate(this_glyph.horizontal):
 		if line == True:
@@ -95,10 +94,6 @@ def render_glyph():
 		else:
 			continue
 
-# value = input("Enter complexity (0.1 to 0.9): ")
-# new = generate_glyph(value)
-
-
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -106,18 +101,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # fill the screen with a color to wipe away anything from last frame
+
+	# fill the screen with a color to wipe away anything from last frame
     screen.fill("white")
 
-    # RENDER YOUR GAME HERE ---------------
+	# RENDER YOUR GAME HERE ---------------
+	
+    render_glyph(generate_glyph_lines(0.4))
     
-    if is_generated == False:
-    	render_glyph()
+    pygame_widgets.update(event)
+    pygame.display.update()
     
-    pygame.draw.rect(screen, black, button_rect, border_radius=5)
-    screen.blit(text_surface, (37, 125))
-    
-    # RENDER YOUR GAME HERE ----------------
+	# RENDER YOUR GAME HERE ----------------
 
     # flip() the display to put your work on screen
     pygame.display.flip()
